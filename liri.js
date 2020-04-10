@@ -67,7 +67,8 @@ function getConcert(searchTerm){
 function getMovie(searchTerm){
     var movieName = searchTerm || "Mr. Nobody";
     var queryURL = "http://www.omdbapi.com/?apikey=trilogy&s" + movieName;
-    
+    //write a for loop to console log details about movie
+
 }
 
 function doCommand(searchTerm){}
