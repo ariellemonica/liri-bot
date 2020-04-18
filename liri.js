@@ -46,6 +46,8 @@ function getSpotify(searchTerm) {
             console.log('Preview link: ', data.tracks.items[i].external_urls.spotify);
             console.log('Song name: ', data.tracks.items[i].name);
         }
+    }).catch(function(err){
+        console.log("Something went wrong: ", err);
     });
 }
 
@@ -62,6 +64,8 @@ function getConcert(searchTerm) {
             console.log('Date of Event: ', moment(response.data[i].datetime).format('MMMM Do YYYY, h:mm:ss a'));
         }
 
+    }).catch(function(err){
+        console.log("Something went wrong: ", err);
     });
 }
 
@@ -73,21 +77,40 @@ function getMovie(searchTerm) {
         // console.log(response.data);
         // console.log(response.data.Search[0].Title);
         var movieTopRes = response.data.Search;
-
+        
+        //write a for loop to console log details about movie
         for (let i = 0; i < response.data.Search.length; i++){
-            console.log('------ ' + i + ' ------ ');
-            console.log('Title of the movie: ', movieTopRes[i].Title);
-            console.log('Release Year: ', movieTopRes[i].Year);
             var movieImdb = movieTopRes[i].imdbID
-            console.log('Imdb id: ', movieImdb);
+            // console.log('Imdb id: ', movieImdb);
+            function newQueryImdb(movieImdb){
+                var newQueryURL = "http://www.omdbapi.com/?apikey=trilogy&i=" + movieImdb;
+                queryImdb(newQueryURL);
+            };
+            newQueryImdb(movieImdb);
         }
 
     }).catch(function(err){
-        console.log("Something went wrong.");
+        console.log("Something went wrong: ", err);
     });
-    //write a for loop to console log details about movie
+
 
 }
 
 function doCommand(searchTerm) { }
+
+function queryImdb(newQueryURL){
+    axios.get(newQueryURL).then(function(response){
+        // console.log(response);
+        console.log(' ------ ');
+        console.log(' ------ ');
+        console.log('Title from IMDB: ', response.data.Title);
+        console.log('Release year from IMDB: ', response.data.Year);
+        console.log('Country: ', response.data.Country);
+        console.log('Plot: ', response.data.Plot);
+        console.log('Rating Score: ', response.data.imdbRating);
+        console.log('Language: ', response.data.Language);
+    }).catch(function(err){
+        console.log("Something went wrong in the IMDB query: ", err);
+    })
+}
 
