@@ -10,6 +10,7 @@ var spotify = new Spotify(keys.spotify);
 
 var axios = require('axios');
 var moment = require('moment');
+var fs = require('fs');
 
 var command = process.argv[2];
 var searchTerm = process.argv.slice(3).join(" ");
@@ -25,7 +26,7 @@ switch (command) {
         getMovie(searchTerm);
         break;
     case "do-what-it-says":
-        doCommand(searchTerm);
+        doCommand();
         break;
     default:
         console.log("Invalid choice - please enter valid search operation: concert-this, spotify-this-song, movie-this.");
@@ -110,7 +111,36 @@ function queryImdb(newQueryURL, i) {
     })
 }
 
-function doCommand(searchTerm) { }
+function doCommand() {
+    fs.readFile('random.txt', 'utf8', function (err, data) {
+        if (err) {
+            return console.log('Something went wrong: ' + err);
+        }
+
+        var dataArr = data.split(" ");
+        var command = dataArr[0];
+        var searchTerm = dataArr.slice(1).join(" ");
+        console.log('--------SANITY CHECK-------\nCommand is: ' + command + '\nSearch term is: ' + searchTerm);
+
+        switch (command) {
+            case "concert-this":
+                getConcert(searchTerm);
+                break;
+            case "spotify-this-song":
+                getSpotify(searchTerm);
+                break;
+            case "movie-this":
+                getMovie(searchTerm);
+                break;
+            case "do-what-it-says":
+                doCommand();
+                break;
+            default:
+                console.log("Invalid choice - please enter valid search operation: concert-this, spotify-this-song, movie-this.");
+        }
+
+    })
+}
 
 
 
