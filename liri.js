@@ -82,11 +82,12 @@ function getMovie(searchTerm) {
         for (let i = 0; i < response.data.Search.length; i++){
             var movieImdb = movieTopRes[i].imdbID
             // console.log('Imdb id: ', movieImdb);
-            function newQueryImdb(movieImdb){
+            function newQueryImdb(movieImdb, i){
+                var i = i;
                 var newQueryURL = "http://www.omdbapi.com/?apikey=trilogy&i=" + movieImdb;
-                queryImdb(newQueryURL);
+                queryImdb(newQueryURL, i);
             };
-            newQueryImdb(movieImdb);
+            newQueryImdb(movieImdb, i);
         }
 
     }).catch(function(err){
@@ -98,13 +99,12 @@ function getMovie(searchTerm) {
 
 function doCommand(searchTerm) { }
 
-function queryImdb(newQueryURL){
-    axios.get(newQueryURL).then(function(response){
+function queryImdb(newQueryURL, i){
+    axios.get(newQueryURL, i).then(function(response){
         // console.log(response);
-        console.log(' ------ ');
-        console.log(' ------ ');
-        console.log('Title from IMDB: ', response.data.Title);
-        console.log('Release year from IMDB: ', response.data.Year);
+        console.log(' ------ Request Iteration: ', i, ' ------ ');
+        console.log('Title: ', response.data.Title);
+        console.log('Release year: ', response.data.Year);
         console.log('Country: ', response.data.Country);
         console.log('Plot: ', response.data.Plot);
         console.log('Rating Score: ', response.data.imdbRating);
