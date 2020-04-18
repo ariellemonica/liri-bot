@@ -32,30 +32,30 @@ switch (command) {
 }
 
 function getSpotify(searchTerm) {
-    var queryString = searchTerm || 'All The Small Things'
+    var queryString = searchTerm || 'This City'
     spotify.search({ type: 'track', query: queryString }, function (err, data) {
         if (err) {
-            return console.log('Error occurred: ' + err);
+            return console.log('Something went wrong: ' + err);
         }
 
         // console.log(data.tracks.items);
         for (let i = 0; i < data.tracks.items.length; i++) {
             console.log(' ------ ' + i + ' ------ ');
-            console.log('Artist(s): ', data.tracks.items[i].artists);
+            console.log('Song name: ', data.tracks.items[i].name);
             console.log('Album: ', data.tracks.items[i].album.name);
             console.log('Preview link: ', data.tracks.items[i].external_urls.spotify);
-            console.log('Song name: ', data.tracks.items[i].name);
+            console.log('Artist(s): ', data.tracks.items[i].artists);
+            //BONUS: if I end up having time for this - pull out Artist(s).name value and push into an array and display as string. 
+            //Directions don't explicitly say to do this, so I'm not going to waste time with it now
         }
-    }).catch(function(err){
-        console.log("Something went wrong: ", err);
     });
 }
 
 function getConcert(searchTerm) {
-    var artist = searchTerm || "Beyonce";
+    var artist = searchTerm || "The Weeknd";
     var queryURL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
     axios.get(queryURL).then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
 
         for (let i = 0; i < response.data.length; i++) {
             console.log(' ------ ' + i + ' ------ ');
@@ -64,43 +64,39 @@ function getConcert(searchTerm) {
             console.log('Date of Event: ', moment(response.data[i].datetime).format('MMMM Do YYYY, h:mm:ss a'));
         }
 
-    }).catch(function(err){
+    }).catch(function (err) {
         console.log("Something went wrong: ", err);
     });
 }
 
 function getMovie(searchTerm) {
-    var movieName = searchTerm || "Mr. Nobody";
+    var movieName = searchTerm || "Moulin Rouge";
     var queryURL = "http://www.omdbapi.com/?apikey=trilogy&s=" + movieName;
     console.log(queryURL);
     axios.get(queryURL).then(function (response) {
         // console.log(response.data);
         // console.log(response.data.Search[0].Title);
         var movieTopRes = response.data.Search;
-        
-        //write a for loop to console log details about movie
-        for (let i = 0; i < response.data.Search.length; i++){
+
+        for (let i = 0; i < response.data.Search.length; i++) {
             var movieImdb = movieTopRes[i].imdbID
             // console.log('Imdb id: ', movieImdb);
-            function newQueryImdb(movieImdb, i){
+            function newQueryImdb(movieImdb, i) {
                 var i = i;
                 var newQueryURL = "http://www.omdbapi.com/?apikey=trilogy&i=" + movieImdb;
                 queryImdb(newQueryURL, i);
             };
             newQueryImdb(movieImdb, i);
         }
-
-    }).catch(function(err){
+    }).catch(function (err) {
         console.log("Something went wrong: ", err);
     });
 
 
 }
 
-function doCommand(searchTerm) { }
-
-function queryImdb(newQueryURL, i){
-    axios.get(newQueryURL, i).then(function(response){
+function queryImdb(newQueryURL, i) {
+    axios.get(newQueryURL, i).then(function (response) {
         // console.log(response);
         console.log(' ------ Request Iteration: ', i, ' ------ ');
         console.log('Title: ', response.data.Title);
@@ -109,8 +105,12 @@ function queryImdb(newQueryURL, i){
         console.log('Plot: ', response.data.Plot);
         console.log('Rating Score: ', response.data.imdbRating);
         console.log('Language: ', response.data.Language);
-    }).catch(function(err){
+    }).catch(function (err) {
         console.log("Something went wrong in the IMDB query: ", err);
     })
 }
+
+function doCommand(searchTerm) { }
+
+
 
