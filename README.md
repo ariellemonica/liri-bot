@@ -41,3 +41,7 @@ $ node liri.js movie-this The Godfather
 $ node liri.js concert-this The Weeknd
 ```
 
+```
+$ node liri.js do-what-it-says
+```
+
